@@ -1,0 +1,141 @@
+package com.example.ex3;
+
+import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText e1;
+    Spinner s1;
+    Button b1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        e1 = findViewById(R.id.editTextText);
+        s1 = findViewById(R.id.spinner);
+        b1 = findViewById(R.id.button);
+
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(MainActivity.this, MainActivity2.class);
+                i.putExtra("Name", e1.getText().toString());
+                i.putExtra("Shape", s1.getSelectedItem().toString());
+                startActivity(i);
+            }
+        });
+    }
+}
+main2
+package com.example.ex3;
+
+import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity2 extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+
+        TextView t1 = findViewById(R.id.textView);
+        TextView t2 = findViewById(R.id.textView2);
+        ImageView imageView = findViewById(R.id.imageView);
+
+        String name = getIntent().getStringExtra("Name");
+        String shape = getIntent().getStringExtra("Shape");
+
+        t1.setText("Name: " + name);
+        t2.setText("Shape: " + shape);
+
+        Bitmap bitmap = Bitmap.createBitmap(800, 800, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+
+        paint.setColor(Color.RED);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(6);
+
+        if (shape.equals("Rectangle")) {
+            canvas.drawRect(200, 200, 600, 500, paint);
+        }
+        else if (shape.equals("Circle")) {
+            canvas.drawCircle(400, 350, 150, paint);
+        }
+        else if (shape.equals("Triangle")) {
+            canvas.drawLine(400, 200, 200, 500, paint);
+            canvas.drawLine(200, 500, 600, 500, paint);
+            canvas.drawLine(600, 500, 400, 200, paint);
+        }else if (shape.equals("Computer")) {
+            // Monitor outline
+            paint.setColor(Color.BLACK);
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(6);
+            canvas.drawRoundRect(200, 150, 600, 400, 20, 20, paint); // Rounded monitor edges
+
+            // Screen inside monitor
+            paint.setColor(Color.LTGRAY);
+            paint.setStyle(Paint.Style.FILL);
+            canvas.drawRoundRect(210, 160, 590, 390, 15, 15, paint);
+
+            // Stand of the monitor
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setColor(Color.BLACK);
+            canvas.drawRect(370, 400, 430, 450, paint);
+
+            // Power button (small circle at bottom right of monitor)
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(Color.RED);
+            canvas.drawCircle(580, 380, 10, paint);
+
+            // Optional: keyboard as a rectangle with lines
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setColor(Color.BLACK);
+            canvas.drawRect(220, 460, 580, 500, paint);
+            for (int i = 0; i < 6; i++) { // simple keys
+                canvas.drawLine(220 + i * 60, 460, 220 + i * 60, 500, paint);
+            }
+        }
+
+
+
+
+        imageView.setImageBitmap(bitmap);
+
+
+    }
+}
